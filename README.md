@@ -1,4 +1,4 @@
-# Account Risk Workbench
+# Account Risk Scoring
 
 Early WIP for an account-risk scoring project.
 
