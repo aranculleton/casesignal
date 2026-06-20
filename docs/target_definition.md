@@ -1,18 +1,23 @@
 # Target Definition Draft
 
-First pass target for the project:
+Current first-pass target:
 
-- Label name: risk_event_next_window
-- Unit: account snapshot
-- Positive label: 1 if a simulated risk event happens after the snapshot date and within the next fixed window
-- Negative label: 0 otherwise
+- Label name: `risk_event_next_window`
+- Unit: one account snapshot row
+- Window: next 90 days after `snapshot_date`
+- Positive label: `1` if at least one risk event lands in that window
+- Negative label: `0` if no event lands in that window
 
-Event examples for simulation:
+Risk event types planned:
 
 - missed payment
 - hardship-style support flag
 - collections referral
 
-Leakage guardrail:
+Current scope note:
+- this is a target spec only for now
+- synthetic event-table generation is the next build step
 
-- Features must be built using data available on or before snapshot_date only.
+Leakage rule:
+
+- features must be built using data available on or before `snapshot_date` only.
