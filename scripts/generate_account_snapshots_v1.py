@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a small synthetic account snapshot table (v1)."""
+"""Generate synthetic account snapshot CSV (v1)."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Generate synthetic account snapshots.")
+    parser = argparse.ArgumentParser(description="Generate synthetic account snapshots")
     parser.add_argument("--rows", type=int, default=500, help="Number of rows to generate.")
     parser.add_argument("--seed", type=int, default=42, help="Random seed.")
     parser.add_argument(
@@ -24,7 +24,6 @@ def parse_args() -> argparse.Namespace:
 
 
 def month_end(dt: date) -> date:
-    """Return a month-end date for any given date."""
     if dt.month == 12:
         next_month = date(dt.year + 1, 1, 1)
     else:
