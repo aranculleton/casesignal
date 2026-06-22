@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import random
+from collections import Counter
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -15,6 +16,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--snapshots", type=Path, default=Path("data/synthetic/account_snapshot_v1.csv"))
     parser.add_argument("--out", type=Path, default=Path("data/synthetic/risk_events_v1.csv"))
     parser.add_argument("--seed", type=int, default=21)
+    parser.add_argument("--max-events", type=int, default=0, help="Stop after N events (0 = no limit)")
     return parser.parse_args()
 
 
@@ -42,6 +44,7 @@ def main() -> int:
     rng = random.Random(args.seed)
     snapshot_rows = read_rows(args.snapshots)
     events: list[dict[str, str]] = []
+    skipped_bad_rows = 0
 
     for row in snapshot_rows:
         try:
@@ -51,6 +54,7 @@ def main() -> int:
             hardship = int(row["hardship_flag_90d"])
             collections = int(row["collections_contact_90d"])
         except (KeyError, ValueError):
+            skipped_bad_rows += 1
             continue
 
         high_util = 1 if util >= 0.90 else 0
@@ -69,6 +73,9 @@ def main() -> int:
             }
         )
 
+        if args.max_events > 0 and len(events) >= args.max_events:
+            break
+
     args.out.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = ["event_id", "account_id", "snapshot_date", "event_date", "event_type"]
     with args.out.open("w", newline="", encoding="utf-8") as handle:
@@ -77,6 +84,15 @@ def main() -> int:
         writer.writerows(events)
 
     print(f"Wrote {len(events)} events from {len(snapshot_rows)} snapshot rows to {args.out}")
+    if skipped_bad_rows:
+        print(f"Skipped {skipped_bad_rows} snapshot rows due to parse/shape issues")
+
+    counts = Counter(e["event_type"] for e in events)
+    if counts:
+        print("Event type counts:")
+        for event_type, n in sorted(counts.items()):
+            print(f"- {event_type}: {n}")
+
     return 0
 
 

@@ -50,21 +50,39 @@ def main() -> int:
         print("Input CSV is empty.")
         return 1
 
+    required_cols = {
+        "account_id",
+        "snapshot_date",
+        "utilization_ratio",
+        "payments_due_30d",
+        "missed_payment_90d",
+        "hardship_flag_90d",
+        "collections_contact_90d",
+    }
+    missing = [name for name in sorted(required_cols) if name not in rows[0]]
+    if missing:
+        print(f"Missing required columns: {', '.join(missing)}")
+        return 1
+
     account_keys = [f"{row['account_id']} @ {row['snapshot_date']}" for row in rows]
 
-    x = jnp.array(
-        [
+    try:
+        x = jnp.array(
             [
-                float(row["utilization_ratio"]),
-                float(row["payments_due_30d"]) / 3.0,
-                float(row["missed_payment_90d"]),
-                float(row["hardship_flag_90d"]),
-                float(row["collections_contact_90d"]),
-            ]
-            for row in rows
-        ],
-        dtype=jnp.float32,
-    )
+                [
+                    float(row["utilization_ratio"]),
+                    float(row["payments_due_30d"]) / 3.0,
+                    float(row["missed_payment_90d"]),
+                    float(row["hardship_flag_90d"]),
+                    float(row["collections_contact_90d"]),
+                ]
+                for row in rows
+            ],
+            dtype=jnp.float32,
+        )
+    except ValueError:
+        print("Could not parse one or more numeric input columns")
+        return 1
 
     # Draft weights for now; replace after label-table work.
     weights = jnp.array(DRAFT_WEIGHTS, dtype=jnp.float32)
