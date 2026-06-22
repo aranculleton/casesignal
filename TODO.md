@@ -5,4 +5,5 @@
 - [x] define a simple first target in plain language (`docs/target_definition.md`)
 - [x] add one SQL draft for account-month features (`sql/account_month_features_v1.sql`)
 - [x] add first synthetic event table for label generation (`scripts/generate_risk_events_v1.py`, `docs/risk_event_schema_v1.md`)
-- [ ] add first SQL draft for joining snapshots to events to build labels
+- [x] add first SQL draft for joining snapshots to events to build labels (`sql/labels_from_events_v1.sql`)
+- [ ] add one local script to export a feature + label training slice CSV
