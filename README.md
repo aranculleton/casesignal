@@ -1,12 +1,13 @@
-# Account Risk Scoring
+# AI-Assisted Account Risk Scoring
 
-This repo is a practical account-risk pipeline built in small, realistic steps.
+This project builds a monthly account-risk pipeline from raw-style account data to model-ready training data.
 
 In plain terms, it does this:
 - generate synthetic account snapshots
 - generate synthetic risk events
 - build features and labels
 - export a training slice for modeling
+- run a quick score check
 
 All data is synthetic at this stage.
 
@@ -23,12 +24,14 @@ Key files:
 Why the AI workflow matters here:
 - many roles now ask for evidence of using Claude/Codex in real delivery work
 - this repo is set up to show that in a measurable way
-- goal is not "AI wrote code"; goal is faster iteration with human checks
+- goal is workflow improvement, not "AI wrote the project"
 
 How AI is being used:
 - AI helps draft feature/SQL/model changes
-- each change is reviewed and either accepted or rejected
-- we keep checks around leakage, shape, and reproducibility
+- each draft is reviewed before merge
+- checks stay in place for leakage, data shape, and reproducibility
+
+The current AI plan is in: `docs/ai_workflow_roadmap.md`
 
 Generate snapshots:
 

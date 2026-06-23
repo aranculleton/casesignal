@@ -16,6 +16,7 @@ By the end, the project should show:
 - AI-assisted feature/model workflow with human review checkpoints
 - measurable deltas (time saved, defects caught, experiments completed)
 - clear documentation of where AI was used and where it was rejected
+- explicit Claude/Codex usage with review evidence and quality gates
 
 ## Why this is worth doing
 
