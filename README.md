@@ -1,37 +1,47 @@
 # CaseSignal
 
-`casesignal` is a practical account-risk scoring project.
+CaseSignal is a synthetic credit-risk decisioning pipeline.
 
-## What is account-risk scoring?
+It combines structured credit-account behavior with AI-extracted servicing-note signals
+to rank accounts by near-term delinquency or escalation risk, explain risk movement,
+and support human review.
 
-Account-risk scoring means ranking accounts by the chance of a near-term credit-risk outcome,
-such as missed payments, arrears escalation, or collections handoff, so teams can intervene earlier.
+The project is intentionally scoped as a prototype: the data is synthetic,
+the scoring logic is transparent, and the AI component is limited to extracting
+auditable note signals rather than making final risk decisions.
 
-CaseSignal is a prototype decision-support pipeline for that workflow.
+## Use case
 
-Given monthly account data and case history text, the target output is:
-- a risk score
-- reason signals that explain why risk moved
-- a short triage summary with suggested next action
+In lending and servicing workflows, teams need to prioritize which accounts to review first.
+CaseSignal models that workflow with:
+- a transparent baseline risk score
+- note-derived risk indicators from servicing notes
+- hybrid score bands and review-ready context
 
-All data in this repository is synthetic.
+## Why AI is used (and bounded)
 
-## Why use AI here?
+AI is used for one narrow task: converting unstructured servicing notes into
+structured, auditable indicators (for example hardship mention, income shock language,
+or vulnerability context).
 
-Structured models are useful, but they often miss high-signal context buried in servicing notes.
-
-AI is used for one bounded job: converting free-text case notes into a small, auditable set of structured indicators
-(for example hardship mention, income shock language, or vulnerability context).
-
-In this project, "case notes" means operational notes captured during account servicing,
-for example payment-arrangement discussions, hardship reviews, and follow-up calls.
-
-The final score remains deterministic and reviewable:
+AI is not used for final risk decisions.
+Final ranking remains deterministic and reviewable:
 - baseline structured model score
 - note-signal feature block
-- transparent score combination and action bands
+- explicit hybrid scoring rule
 
-If note extraction fails, the pipeline falls back to structured-only scoring.
+If extraction fails, the pipeline falls back to structured-only scoring.
+
+## Primary project question
+
+Do AI-extracted servicing-note signals improve top-k risk prioritization
+over structured features alone?
+
+Core evaluation metrics:
+- ROC-AUC
+- precision@top-k
+- lift@top-k
+- reviewer-time proxy
 
 ## Current status
 
@@ -51,13 +61,14 @@ Core files:
 
 Week 1:
 1. train a baseline model on `training_slice_v1.csv`
-2. generate synthetic case notes linked to account-month rows
+2. generate synthetic servicing notes linked to account-month rows
 3. define note-signal schema + deterministic fallback parser
 
 Week 2:
 1. add note-signal extraction step
 2. build hybrid score + action banding
 3. compare baseline vs hybrid (`precision@top-k`, lift, reviewer-time proxy)
+4. write a short model-card style limitations note
 
 This scope is intentionally sized for one developer over two focused weeks.
 

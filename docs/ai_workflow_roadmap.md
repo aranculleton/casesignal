@@ -1,16 +1,16 @@
 # CaseSignal Roadmap (2-Week MVP)
 
 Goal:
-build and evaluate a practical account-risk scoring pipeline that combines
-structured account behavior with AI-extracted note signals.
+build and evaluate a practical credit-risk decisioning pipeline that combines
+structured credit-account behavior with AI-extracted servicing-note signals.
 
 ## Problem
 
-Account-risk scoring ranks accounts by likelihood of near-term adverse outcomes,
-for example missed payments or arrears escalation.
+Credit-risk decisioning ranks accounts by likelihood of near-term adverse outcomes,
+for example missed payments, delinquency progression, or arrears escalation.
 
 Structured features usually capture payment and account behavior well,
-but they can miss early warnings that appear first in case notes.
+but they can miss early warnings that appear first in servicing notes.
 
 ## Solution shape
 
@@ -18,13 +18,13 @@ but they can miss early warnings that appear first in case notes.
 - snapshots -> features -> labels -> baseline score
 
 2. Note signal layer
-- synthetic case notes -> AI extraction -> structured note indicators
+- synthetic servicing notes -> AI extraction -> structured note indicators
 
 3. Hybrid score
 - combine baseline score and note indicators
 
 4. Triage output
-- risk band + short reason summary + suggested next action
+- risk band + short reason summary + suggested review action
 
 ## Why AI is a good fit here
 
@@ -49,9 +49,9 @@ but they can miss early warnings that appear first in case notes.
 - output ROC-AUC, PR-AUC, calibration note
 - save row-level predictions for comparison
 
-2. Synthetic case-note dataset
+2. Synthetic servicing-note dataset
 - `scripts/generate_case_notes_v1.py`
-- link notes to account-month grain
+- link servicing notes to account-month grain
 - document schema in `docs/case_note_schema_v1.md`
 
 3. Note-signal contract
@@ -75,6 +75,7 @@ but they can miss early warnings that appear first in case notes.
 4. Evaluation
 - compare baseline vs hybrid
 - report `precision@top-k`, lift, and reviewer-time proxy
+- add short model-card style limitations and governance notes
 
 ## Immediate next step
 
