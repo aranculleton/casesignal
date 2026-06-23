@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Quick JAX score check against the snapshot CSV."""
+"""Quick JAX score check using the snapshot CSV."""
 
 from __future__ import annotations
 
@@ -84,7 +84,7 @@ def main() -> int:
         print("Could not parse one or more numeric input columns")
         return 1
 
-    # Draft weights for now; replace after label-table work.
+    # Rough weights for now; replace after baseline model work.
     weights = jnp.array(DRAFT_WEIGHTS, dtype=jnp.float32)
     bias = jnp.array(DRAFT_BIAS, dtype=jnp.float32)
 

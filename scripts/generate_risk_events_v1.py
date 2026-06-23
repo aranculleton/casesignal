@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate synthetic risk events from account snapshot rows."""
+"""First pass synthetic risk-event generator from snapshot rows."""
 
 from __future__ import annotations
 

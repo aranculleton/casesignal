@@ -1,21 +1,26 @@
 # Account Risk Scoring
 
-This project is for testing a simple monthly account-risk workflow.
+This repo is where I am building out a monthly account-risk workflow in small steps.
 
-Right now the flow is:
+Current flow right now:
 - generate synthetic account snapshots
 - build first-pass features in SQL
-- run a basic score pass on the same data
+- generate synthetic risk events
+- build a feature + label training slice CSV
+- run a quick score pass on the same data
 
 All data is synthetic at this stage.
 
-Main files:
+Where files are at:
 - `scripts/generate_account_snapshots_v1.py`
+- `scripts/generate_risk_events_v1.py`
+- `scripts/export_training_slice_v1.py`
 - `sql/account_month_features_v1.sql`
+- `sql/labels_from_events_v1.sql`
 - `docs/account_snapshot_schema_v1.md`
 - `docs/target_definition.md`
 
-Run locally:
+Generate snapshots:
 
 ```bash
 python3 scripts/generate_account_snapshots_v1.py --rows 200 --seed 7
@@ -23,9 +28,16 @@ python3 scripts/generate_account_snapshots_v1.py --rows 200 --seed 7
 
 Output: `data/synthetic/account_snapshot_v1.csv` (gitignored).
 
+Generate events and training slice:
+
+```bash
+python3 scripts/generate_risk_events_v1.py
+python3 scripts/export_training_slice_v1.py
+```
+
 JAX step (optional):
 
-JAX is only used here for a quick vectorized score pass. It does not train a model yet.
+JAX here is just for a quick vectorized score check. It is not model training yet.
 
 Install and run:
 
@@ -39,8 +51,7 @@ What this script does:
 - builds a feature matrix from existing columns
 - applies fixed weights and prints highest-score rows
 
-Next:
+Next steps:
 
-- add a synthetic event table for labels
-- make the SQL feature query runnable in a repeatable local flow
-- replace fixed weights with a fitted baseline
+- add first baseline model script using `training_slice_v1.csv`
+- keep refining label quality and event generation assumptions

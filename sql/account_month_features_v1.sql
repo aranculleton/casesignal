@@ -1,6 +1,6 @@
--- Draft account-month feature query (v1).
--- Assumes `account_snapshot_v1` has already been loaded into a local DB.
--- Temporary: no label join yet, just first-pass feature columns.
+-- First pass account-month feature query.
+-- Assumes account_snapshot_v1 is loaded in the local DB.
+-- No label join yet; this is features only.
 
 WITH base AS (
     SELECT

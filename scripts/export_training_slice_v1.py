@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a training-slice CSV from snapshot and event synthetic tables."""
+"""Export a quick training-slice CSV from snapshots and events."""
 
 from __future__ import annotations
 

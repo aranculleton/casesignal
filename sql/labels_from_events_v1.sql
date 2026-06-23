@@ -1,4 +1,4 @@
--- Draft label build query from synthetic snapshot + event tables.
+-- First pass label query from snapshot + event tables.
 -- Uses a 90-day forward window from each snapshot_date.
 
 WITH snapshots AS (

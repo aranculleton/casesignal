@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate synthetic account snapshot CSV (v1)."""
+"""First pass generator for synthetic account snapshots."""
 
 from __future__ import annotations
 
