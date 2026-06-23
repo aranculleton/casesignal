@@ -21,6 +21,7 @@ data/synthetic/*
 !data/synthetic/note_signals_v1.csv
 !data/synthetic/baseline_predictions_v1.csv
 !data/synthetic/hybrid_predictions_v1.csv
+!data/synthetic/case_summary_v1.csv
 !data/synthetic/model_metrics_v1.json
 
 reports/*

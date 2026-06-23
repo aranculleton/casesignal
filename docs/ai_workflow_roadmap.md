@@ -10,11 +10,11 @@ Completed:
 - structured baseline training and holdout scoring
 - synthetic servicing-note generation
 - deterministic note-signal extraction
+- triage summary and action output generation
 - baseline vs hybrid evaluation report
 - model card and AI controls notes
 
 Remaining:
-- triage summary/action output script (`scripts/generate_case_summary_v1.py`)
 - optional LLM extractor as a bounded extension behind schema validation
 
 ## Problem

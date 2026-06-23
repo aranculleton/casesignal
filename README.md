@@ -65,6 +65,7 @@ The table is populated by `scripts/score_hybrid_model_v1.py` and written to `rep
 - `scripts/generate_servicing_notes_v1.py`
 - `scripts/extract_note_signals_v1.py`
 - `scripts/score_hybrid_model_v1.py`
+- `scripts/generate_case_summary_v1.py`
 - `tests/`
 
 ## Current status
@@ -81,20 +82,18 @@ Core files:
 - `sql/account_month_features_v1.sql`
 - `sql/labels_from_events_v1.sql`
 
-## Two-week MVP scope
+## Delivery progress
 
-Week 1:
-1. train a baseline model on `training_slice_v1.csv`
-2. generate synthetic servicing notes linked to account-month rows
-3. define note-signal schema + deterministic fallback parser
+Completed in repository:
+1. structured baseline model training + holdout evaluation
+2. synthetic servicing-note generation and deterministic note-signal extraction
+3. hybrid scoring with baseline vs note-signal comparison
+4. model controls documentation (`docs/model_card.md`, `docs/ai_controls.md`)
+5. reproducible artifacts in `data/synthetic/` and `reports/model_results.md`
 
-Week 2:
-1. add note-signal extraction step
-2. build hybrid score + action banding
-3. compare baseline vs hybrid (`precision@top-k`, lift, reviewer-time proxy)
-4. write a short model-card style limitations note
-
-This scope is intentionally sized for one developer over two focused weeks.
+Current next build item:
+1. optional bounded LLM extractor behind the same signal schema and controls
+2. calibration and threshold tuning checks for production-like score distributions
 
 ## Quick run (current data flow)
 
@@ -106,6 +105,7 @@ python3 scripts/generate_servicing_notes_v1.py
 python3 scripts/extract_note_signals_v1.py
 python3 scripts/train_baseline_model_v1.py
 python3 scripts/score_hybrid_model_v1.py
+python3 scripts/generate_case_summary_v1.py
 ```
 
 Expected outputs:
@@ -116,6 +116,7 @@ Expected outputs:
 - `data/synthetic/note_signals_v1.csv`
 - `data/synthetic/baseline_predictions_v1.csv`
 - `data/synthetic/hybrid_predictions_v1.csv`
+- `data/synthetic/case_summary_v1.csv`
 - `data/synthetic/model_metrics_v1.json`
 - `reports/model_results.md`
 
