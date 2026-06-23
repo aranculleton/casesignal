@@ -1,72 +1,55 @@
-# AI-Assisted Account Risk Scoring
+# RiskSignal Copilot
 
-This project builds a monthly account-risk pipeline from raw-style account data to model-ready training data.
+`account-risk-scoring` is now focused on one thing:
+build a useful AI-powered risk triage layer on top of account risk scoring.
 
-In plain terms, it does this:
-- generate synthetic account snapshots
-- generate synthetic risk events
-- build features and labels
-- export a training slice for modeling
-- run a quick score check
+## What this project is
 
-All data is synthetic at this stage.
+The product direction is a hybrid system:
+- normal risk score from structured data
+- AI-extracted risk signals from free-text case notes
+- combined priority score + short action summary for case workers
 
-Key files:
+This keeps model math where it should be, and uses AI where it adds value
+(unstructured signals and decision support).
+
+## What already exists
+
+Structured data pipeline:
+- synthetic snapshots
+- synthetic risk events
+- SQL feature draft
+- SQL label draft
+- training slice export
+
+Main files right now:
 - `scripts/generate_account_snapshots_v1.py`
 - `scripts/generate_risk_events_v1.py`
 - `scripts/export_training_slice_v1.py`
 - `sql/account_month_features_v1.sql`
 - `sql/labels_from_events_v1.sql`
-- `docs/account_snapshot_schema_v1.md`
-- `docs/target_definition.md`
-- `docs/ai_workflow_roadmap.md`
 
-Why the AI workflow matters here:
-- many roles now ask for evidence of using Claude/Codex in real delivery work
-- this repo is set up to show that in a measurable way
-- goal is workflow improvement, not "AI wrote the project"
+## Where AI is integrated (project direction)
 
-How AI is being used:
-- AI helps draft feature/SQL/model changes
-- each draft is reviewed before merge
-- checks stay in place for leakage, data shape, and reproducibility
+AI is part of the scoring product itself, not just development workflow.
 
-The current AI plan is in: `docs/ai_workflow_roadmap.md`
+Planned integration:
+1. parse synthetic case notes into structured risk signals
+2. combine structured score + note-derived score
+3. output a short risk reason summary and next-best-action suggestion
 
-Generate snapshots:
+## Current roadmap
+
+See `docs/ai_workflow_roadmap.md` for the full start-to-finish plan.
+
+## Quick run (current baseline data flow)
 
 ```bash
 python3 scripts/generate_account_snapshots_v1.py --rows 200 --seed 7
-```
-
-Output: `data/synthetic/account_snapshot_v1.csv` (gitignored).
-
-Generate events and training slice:
-
-```bash
 python3 scripts/generate_risk_events_v1.py
 python3 scripts/export_training_slice_v1.py
 ```
 
-JAX step (optional):
+## Next build step
 
-JAX is currently used for a quick vectorized score check only.
-Baseline model training is a separate next step.
-
-Install and run:
-
-```bash
-pip install "jax[cpu]"
-python3 scripts/jax_score_smoke.py --input data/synthetic/account_snapshot_v1.csv --top-n 10
-```
-
-What this script does:
-- reads the snapshot CSV
-- builds a feature matrix from existing columns
-- applies fixed weights and prints highest-score rows
-
-Next steps:
-
-- add first baseline model script using `training_slice_v1.csv`
-- add AI review logs for accepted/rejected suggestions
-- keep refining label quality and event generation assumptions
+Add the first baseline model script using `training_slice_v1.csv`, then layer in the first AI note-signal module.

@@ -1,11 +1,13 @@
 # TODO
 
-- [x] pick a first synthetic table schema (`docs/account_snapshot_schema_v1.md`)
-- [x] write a tiny data generator script (`scripts/generate_account_snapshots_v1.py`)
-- [x] define a simple first target in plain language (`docs/target_definition.md`)
-- [x] add one SQL draft for account-month features (`sql/account_month_features_v1.sql`)
-- [x] add first synthetic event table for label generation (`scripts/generate_risk_events_v1.py`, `docs/risk_event_schema_v1.md`)
-- [x] add first SQL draft for joining snapshots to events to build labels (`sql/labels_from_events_v1.sql`)
-- [x] add one local script to export a feature + label training slice CSV (`scripts/export_training_slice_v1.py`)
-- [x] add AI workflow roadmap plan (`docs/ai_workflow_roadmap.md`)
-- [ ] add first baseline model script using `training_slice_v1.csv`
+## Current direction: RiskSignal Copilot
+
+- [x] structured data foundation (snapshots -> events -> labels -> training slice)
+- [x] AI product integration plan (`docs/ai_workflow_roadmap.md`)
+
+- [ ] phase 1: baseline model script (`scripts/train_baseline_v1.py`)
+- [ ] phase 2: synthetic case-note generator (`scripts/generate_case_notes_v1.py`)
+- [ ] phase 3: note-signal extraction module (`scripts/extract_note_signals_v1.py`)
+- [ ] phase 4: hybrid scoring module (`scripts/build_hybrid_score_v1.py`)
+- [ ] phase 5: case summary + action output (`scripts/generate_case_summary_v1.py`)
+- [ ] phase 6: baseline-vs-hybrid evaluation report

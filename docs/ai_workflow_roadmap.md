@@ -1,156 +1,115 @@
-# AI Workflow Roadmap (Plan Only)
+# AI Product Integration Roadmap
 
-This is a practical plan to integrate AI tooling into the project in a way that is useful for real work and credible on a CV.
+This plan is about integrating AI into the scoring product itself.
+Not "AI writing code".
 
-## Brutally honest view
+## Direction
 
-- Using Claude/Codex by itself is not strong CV evidence.
-- Employers care more about: what changed in delivery speed/quality, how safe/reproducible the workflow is, and whether you can verify AI outputs.
-- Best move is to keep this project and add an AI-assisted engineering layer around it.
-- Full migration to an "AI project" is not needed right now and could weaken the risk-scoring narrative.
+Working project name: **RiskSignal Copilot**
 
-## Target outcome
+Core idea:
+- keep a normal risk score from structured account data
+- add AI-derived signal from free-text case notes
+- combine both into a triage-ready output:
+  - priority score
+  - short risk reason summary
+  - next-best-action suggestion
 
-By the end, the project should show:
-- reproducible baseline model pipeline
-- AI-assisted feature/model workflow with human review checkpoints
-- measurable deltas (time saved, defects caught, experiments completed)
-- clear documentation of where AI was used and where it was rejected
-- explicit Claude/Codex usage with review evidence and quality gates
+## Why this makes sense
 
-## Why this is worth doing
+For real usage:
+- structured models miss signal in notes/case updates
+- AI helps convert unstructured notes into usable risk features
+- teams get faster triage context, not just a number
 
-This is designed to be useful for hiring conversations:
-- proves AI was integrated into delivery, not just experimented with
-- shows human review and quality gates around AI suggestions
-- links each workflow change to concrete output (metrics, logs, run artifacts)
+For CV value:
+- shows AI integrated into product behavior
+- keeps measurable outputs (precision/recall, triage lift, time-to-review)
+- keeps risk modeling + data engineering narrative intact
 
-## Execution style
+## End-to-end target architecture
 
-- one thin slice per session
-- one main concern per commit
-- keep human review explicit
-- push in small increments
+1. Structured pipeline
+- snapshots -> features -> labels -> baseline model score
+
+2. Note signal pipeline
+- synthetic case notes -> AI extraction -> risk indicators
+
+3. Hybrid scoring layer
+- combine structured score + note signal score
+
+4. Triage output layer
+- score band + reasons + suggested action
 
 ## Phase plan
 
-## Phase 1: Baseline model (non-AI control)
+## Phase 1: Baseline model control
 
 Goal:
-- establish a normal baseline workflow before AI integration
+- train first non-AI baseline on `training_slice_v1.csv`
 
 Deliverables:
-- baseline model script using `training_slice_v1.csv`
-- basic metrics output (ROC-AUC, PR-AUC, label rate)
-- small run log artifact
+- `scripts/train_baseline_v1.py`
+- metrics output (ROC-AUC, PR-AUC, calibration note)
+- saved predictions file for downstream comparison
 
-Commit pattern:
-1. add `scripts/train_baseline_v1.py`
-2. add metric output file path + README note
-3. tidy script args and defaults after first run
-
-CV evidence:
-- "Built baseline account-risk model pipeline from synthetic snapshots/events to labeled training slice and metrics output."
-
-## Phase 2: AI-assisted feature proposal loop
+## Phase 2: Synthetic case-note dataset
 
 Goal:
-- use AI to propose feature changes, but gate with human review
+- add realistic free-text notes linked to accounts/snapshots
 
 Deliverables:
-- `prompts/feature_ideas_v1.md` (prompt templates)
-- `docs/feature_review_log.md` (accept/reject with reason)
-- first accepted feature change + one rejected suggestion
+- `scripts/generate_case_notes_v1.py`
+- `docs/case_note_schema_v1.md`
+- sample note classes (payment stress, income shock, vulnerability mention, admin-only)
 
-Commit pattern:
-1. add prompt and review-log templates
-2. add one accepted feature change
-3. add one rejected AI suggestion entry
-
-CV evidence:
-- "Ran AI-assisted feature ideation with explicit review logging; accepted and rejected suggestions based on leakage and signal checks."
-
-## Phase 3: AI-assisted SQL iteration with checks
+## Phase 3: AI note-signal extraction
 
 Goal:
-- use AI for SQL drafts while enforcing deterministic checks
+- convert note text into structured risk indicators
 
 Deliverables:
-- SQL checklist (`docs/sql_review_checklist.md`)
-- one AI-drafted SQL revision with manual corrections recorded
-- simple query-validation script or smoke query runner
+- `scripts/extract_note_signals_v1.py`
+- extraction schema (JSON fields + confidence)
+- fallback deterministic parser for offline test mode
 
-Commit pattern:
-1. add SQL checklist
-2. apply one SQL revision from AI draft
-3. add/adjust validation check
-
-CV evidence:
-- "Integrated AI SQL drafting with manual validation checklist to prevent schema drift and leakage."
-
-## Phase 4: Experiment ledger and reproducibility
+## Phase 4: Hybrid score assembly
 
 Goal:
-- make AI-assisted and manual experiments traceable
+- merge baseline score and note-signal score into one triage score
 
 Deliverables:
-- `experiments/ledger.csv` (run_id, change, ai_used, outcome)
-- `scripts/run_experiment_v1.py` or similar helper
-- stable run naming convention
+- `scripts/build_hybrid_score_v1.py`
+- weighted blend + simple calibration rule
+- comparison report vs baseline-only
 
-Commit pattern:
-1. add ledger format
-2. add run helper script
-3. log first 2-3 experiments
-
-CV evidence:
-- "Added experiment ledger linking code changes to outcomes across AI-assisted and manual runs."
-
-## Phase 5: Quality gates for AI usage
+## Phase 5: Action summary output
 
 Goal:
-- prove outputs are checked, not blindly accepted
+- output short human-readable case summaries and next action
 
 Deliverables:
-- lightweight policy doc (`docs/ai_usage_policy.md`)
-- pre-push checks for key scripts/SQL
-- explicit checklist item: leakage, label window, data-shape sanity
+- `scripts/generate_case_summary_v1.py`
+- action taxonomy (`monitor`, `call`, `hardship review`, `collections review`)
+- one-line reason pack from structured + note signals
 
-Commit pattern:
-1. add policy + checklist
-2. add pre-push command docs/task
-3. update after first real failure caught
-
-CV evidence:
-- "Introduced AI usage guardrails and pre-push checks; caught and fixed quality issues before merge."
-
-## Phase 6: Portfolio/CV packaging
+## Phase 6: Evaluation and evidence pack
 
 Goal:
-- present this as an engineering workflow case study, not "I used AI"
+- show AI layer adds value instead of noise
 
 Deliverables:
-- short case-study doc (`docs/case_study_ai_workflow.md`)
-- quantified outcomes section (speed, quality, confidence)
-- concise CV bullets tied to artifacts
+- evaluation notebook/script comparing baseline vs hybrid
+- metrics: lift, precision@top-k, reviewer-time proxy
+- `docs/case_study_risksignal_copilot.md`
 
-Commit pattern:
-1. case-study draft
-2. add quantified results from ledger
-3. tighten wording and links
+## Guardrails
 
-CV evidence:
-- "Built a human-reviewed AI-assisted risk modeling workflow with reproducible experiment tracking and quality gates."
-
-## What not to do
-
-- do not claim autonomous AI model-building
-- do not skip baseline/non-AI control
-- do not merge AI suggestions without traceable review notes
-- do not flood commits with unrelated refactors
+- do not claim autonomous decisioning
+- always preserve deterministic fallback path
+- keep feature leakage checks in place
+- keep extraction confidence thresholds explicit
 
 ## Next immediate step
 
-- implement Phase 1, commit 1:
-  - add `scripts/train_baseline_v1.py`
-  - keep it simple (logistic baseline + metrics)
+Build Phase 1 (`train_baseline_v1.py`) and lock the baseline metrics before adding note-signal AI.
