@@ -10,9 +10,21 @@ __pycache__/
 # Local env
 .env
 
-# Generated outputs (added later when scripts exist)
-data/
-reports/
+# Generated outputs (track only core artifact files)
+data/*
+!data/synthetic/
+data/synthetic/*
+!data/synthetic/account_snapshot_v1.csv
+!data/synthetic/risk_events_v1.csv
+!data/synthetic/training_slice_v1.csv
+!data/synthetic/servicing_notes_v1.csv
+!data/synthetic/note_signals_v1.csv
+!data/synthetic/baseline_predictions_v1.csv
+!data/synthetic/hybrid_predictions_v1.csv
+!data/synthetic/model_metrics_v1.json
+
+reports/*
+!reports/model_results.md
 
 # Editor/OS
 .DS_Store

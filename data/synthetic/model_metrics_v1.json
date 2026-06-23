@@ -1,0 +1,26 @@
+{
+  "top_fraction": 0.1,
+  "target_positive_share_for_proxy": 0.5,
+  "baseline": {
+    "roc_auc": 0.8474636818290069,
+    "precision_top_k": 0.2916666666666667,
+    "lift_top_k": 3.68421052631579,
+    "base_rate": 0.07916666666666666,
+    "top_k_count": 24,
+    "reviewer_time_proxy_share": 0.13333333333333333,
+    "reviewer_time_proxy_count": 32,
+    "total_rows": 240,
+    "positive_rows": 19
+  },
+  "hybrid": {
+    "roc_auc": 0.7895927601809954,
+    "precision_top_k": 0.3333333333333333,
+    "lift_top_k": 4.2105263157894735,
+    "base_rate": 0.07916666666666666,
+    "top_k_count": 24,
+    "reviewer_time_proxy_share": 0.14166666666666666,
+    "reviewer_time_proxy_count": 34,
+    "total_rows": 240,
+    "positive_rows": 19
+  }
+}
