@@ -6,4 +6,5 @@
 - [x] add one SQL draft for account-month features (`sql/account_month_features_v1.sql`)
 - [x] add first synthetic event table for label generation (`scripts/generate_risk_events_v1.py`, `docs/risk_event_schema_v1.md`)
 - [x] add first SQL draft for joining snapshots to events to build labels (`sql/labels_from_events_v1.sql`)
-- [ ] add one local script to export a feature + label training slice CSV
+- [x] add one local script to export a feature + label training slice CSV (`scripts/export_training_slice_v1.py`)
+- [ ] add first baseline model script using `training_slice_v1.csv`
