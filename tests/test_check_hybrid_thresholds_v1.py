@@ -15,6 +15,9 @@ SPEC.loader.exec_module(MODULE)
 
 
 class ThresholdHelperTests(unittest.TestCase):
+    def test_quantile_empty_values_returns_zero(self) -> None:
+        self.assertAlmostEqual(MODULE.quantile([], 0.5), 0.0)
+
     def test_quantile_clamps_bounds(self) -> None:
         values = [0.10, 0.20, 0.30]
         self.assertAlmostEqual(MODULE.quantile(values, -1.0), 0.10)
