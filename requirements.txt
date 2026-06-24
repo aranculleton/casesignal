@@ -1,0 +1,3 @@
+# CaseSignal v0.1 runtime dependencies
+# Current pipeline scripts use Python standard library only.
+# Keep this file as the stable install entrypoint as dependencies are added.

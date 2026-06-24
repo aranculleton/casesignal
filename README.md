@@ -97,6 +97,17 @@ Current next build item:
 
 ## Quick run (current data flow)
 
+Setup:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Run pipeline:
+
 ```bash
 python3 scripts/generate_account_snapshots_v1.py --rows 1200 --seed 7
 python3 scripts/generate_risk_events_v1.py --seed 21
@@ -106,6 +117,12 @@ python3 scripts/extract_note_signals_v1.py
 python3 scripts/train_baseline_model_v1.py
 python3 scripts/score_hybrid_model_v1.py
 python3 scripts/generate_case_summary_v1.py
+```
+
+Run tests:
+
+```bash
+python3 -m unittest discover -s tests
 ```
 
 Expected outputs:
