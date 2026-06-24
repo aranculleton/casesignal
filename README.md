@@ -138,6 +138,12 @@ Run tests:
 python3 -m unittest discover -s tests
 ```
 
+Check hybrid-score threshold suggestions:
+
+```bash
+python3 scripts/check_hybrid_thresholds_v1.py --split test --elevated-quantile 0.85 --high-quantile 0.95
+```
+
 Expected outputs:
 - `data/synthetic/account_snapshot_v1.csv`
 - `data/synthetic/risk_events_v1.csv`
