@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 from pathlib import Path
 
 
@@ -28,6 +29,12 @@ def parse_args() -> argparse.Namespace:
         type=float,
         default=0.85,
         help="Quantile for elevated-risk threshold",
+    )
+    parser.add_argument(
+        "--json-out",
+        type=Path,
+        default=None,
+        help="Optional output path for threshold summary JSON",
     )
     return parser.parse_args()
 
@@ -54,6 +61,22 @@ def collect_scores(predictions_path: Path, split: str) -> list[float]:
     return scores
 
 
+def threshold_payload(
+    scores: list[float],
+    split: str,
+    elevated_quantile: float,
+    high_quantile: float,
+) -> dict[str, float | int | str]:
+    return {
+        "split": split,
+        "rows_evaluated": len(scores),
+        "elevated_quantile": elevated_quantile,
+        "high_quantile": high_quantile,
+        "elevated_threshold": quantile(scores, elevated_quantile),
+        "high_threshold": quantile(scores, high_quantile),
+    }
+
+
 def main() -> int:
     args = parse_args()
     if not args.hybrid_predictions.exists():
@@ -69,15 +92,26 @@ def main() -> int:
         print("No scores found for requested split")
         return 1
 
-    print(f"Rows evaluated: {len(scores)} (split={args.split})")
+    payload = threshold_payload(
+        scores=scores,
+        split=args.split,
+        elevated_quantile=args.elevated_quantile,
+        high_quantile=args.high_quantile,
+    )
+
+    print(f"Rows evaluated: {payload['rows_evaluated']} (split={payload['split']})")
     for q in (0.50, 0.75, 0.90, 0.95, 0.99):
         print(f"p{int(q * 100):02d}: {quantile(scores, q):.4f}")
 
-    elevated_threshold = quantile(scores, args.elevated_quantile)
-    high_threshold = quantile(scores, args.high_quantile)
     print("Suggested thresholds:")
-    print(f"- elevated ({args.elevated_quantile:.0%}): {elevated_threshold:.4f}")
-    print(f"- high ({args.high_quantile:.0%}): {high_threshold:.4f}")
+    print(f"- elevated ({args.elevated_quantile:.0%}): {payload['elevated_threshold']:.4f}")
+    print(f"- high ({args.high_quantile:.0%}): {payload['high_threshold']:.4f}")
+
+    if args.json_out is not None:
+        args.json_out.parent.mkdir(parents=True, exist_ok=True)
+        with args.json_out.open("w", encoding="utf-8") as handle:
+            json.dump(payload, handle, indent=2)
+        print(f"Wrote threshold summary to {args.json_out}")
 
     return 0
 

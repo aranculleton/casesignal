@@ -45,6 +45,19 @@ class ThresholdHelperTests(unittest.TestCase):
             self.assertEqual(MODULE.collect_scores(csv_path, "test"), [0.10, 0.20])
             self.assertEqual(MODULE.collect_scores(csv_path, "all"), [0.10, 0.20, 0.42])
 
+    def test_threshold_payload_contains_expected_fields(self) -> None:
+        payload = MODULE.threshold_payload(
+            scores=[0.10, 0.20, 0.30, 0.40],
+            split="test",
+            elevated_quantile=0.75,
+            high_quantile=0.95,
+        )
+
+        self.assertEqual(payload["split"], "test")
+        self.assertEqual(payload["rows_evaluated"], 4)
+        self.assertAlmostEqual(payload["elevated_threshold"], 0.30)
+        self.assertAlmostEqual(payload["high_threshold"], 0.40)
+
 
 if __name__ == "__main__":
     unittest.main()
