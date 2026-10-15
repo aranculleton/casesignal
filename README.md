@@ -66,49 +66,36 @@ to capture a fixed share of future escalations.
 | Structured baseline | 0.847 | 0.292 | 3.68 | 13.3% (32/240) for 50% escalation capture |
 | Structured + servicing-note signals | 0.790 | 0.333 | 4.21 | 14.2% (34/240) for 50% escalation capture |
 
-The table is populated by `scripts/score_hybrid_model_v1.py` and written to `reports/model_results.md`.
+The note signals cost some overall ROC-AUC and slightly raise the review effort for 50%
+capture, but they improve precision and lift in the top 10%: they help most where review
+capacity is tightest. The table is written by `scripts/score_hybrid_model_v1.py` to
+`reports/model_results.md`.
 
-## Implementation artifacts
+## What's in the repo
 
-- `reports/model_results.md`
-- `docs/model_card.md`
-- `docs/ai_controls.md`
-- `data/synthetic/servicing_notes_v1.csv`
-- `scripts/train_baseline_model_v1.py`
-- `scripts/generate_servicing_notes_v1.py`
-- `scripts/extract_note_signals_v1.py`
-- `scripts/score_hybrid_model_v1.py`
-- `scripts/generate_case_summary_v1.py`
-- `tests/`
+| Path | What it holds |
+| --- | --- |
+| `scripts/` | data generation, baseline training, note-signal extraction, hybrid scoring, case summaries |
+| `sql/` | account-month features and labels from events |
+| `docs/` | model card, AI controls, data schemas and the roadmap |
+| `data/synthetic/` | the generated data and every pipeline output |
+| `reports/model_results.md` | the model comparison above |
+| `tests/` | unit tests |
 
-## Current status
+## Status
 
-Already in place:
-- synthetic snapshots and events generation
-- SQL feature and label drafts
-- training slice export
+Done:
+1. synthetic account snapshots, risk events and a training slice, with SQL features and labels
+2. structured baseline model, trained and evaluated on a holdout
+3. synthetic servicing notes and deterministic note-signal extraction
+4. hybrid scoring, compared against the baseline
+5. model controls documentation (`docs/model_card.md`, `docs/ai_controls.md`)
 
-Core files:
-- `scripts/generate_account_snapshots_v1.py`
-- `scripts/generate_risk_events_v1.py`
-- `scripts/export_training_slice_v1.py`
-- `sql/account_month_features_v1.sql`
-- `sql/labels_from_events_v1.sql`
+Next:
+1. an optional, bounded LLM extractor behind the same signal schema and controls
+2. calibration and threshold checks against production-like score distributions
 
-## Delivery progress
-
-Completed in repository:
-1. structured baseline model training + holdout evaluation
-2. synthetic servicing-note generation and deterministic note-signal extraction
-3. hybrid scoring with baseline vs note-signal comparison
-4. model controls documentation (`docs/model_card.md`, `docs/ai_controls.md`)
-5. reproducible artifacts in `data/synthetic/` and `reports/model_results.md`
-
-Current next build item:
-1. optional bounded LLM extractor behind the same signal schema and controls
-2. calibration and threshold tuning checks for production-like score distributions
-
-## Quick run (current data flow)
+## Run it
 
 Setup:
 
